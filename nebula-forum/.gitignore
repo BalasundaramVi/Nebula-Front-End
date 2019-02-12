@@ -19,3 +19,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+
+# Ignore firebase for now
+./src/firebaseConfig.js
