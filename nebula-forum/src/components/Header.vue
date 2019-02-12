@@ -54,4 +54,8 @@ export default {
   flex: 3;
 }
 
+.or {
+  margin-top: 13px;
+}
+
 </style>
