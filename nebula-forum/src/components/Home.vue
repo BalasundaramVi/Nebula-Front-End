@@ -7,11 +7,7 @@
         <h5>After you answer, your entry will be saved and you will be able to see the stats on who voted for what!</h5>
         <h2>Ready to begin?</h2>
         <div class="selection-container">
-          <div class="ui buttons">
-            <button class="ui positive massive button">Login</button>
-            <div class="or"></div>
-            <button class="ui massive button">Sign Up</button>
-          </div>
+          <button class="ui massive primary button">Login | Sign Up</button>
         </div>
       </div>
     </div>

@@ -1,29 +1,33 @@
 <template>
   <header class="top-header">
     <div class="logo-container" />
-    <div class="ui four item menu nav-bar">
+    <div v-if="currentUser" class="ui three item menu nav-bar">
       <div :class="{ active: isActive === 'Home' }" class="ui  primary button item">
         HOME
       </div>
-      <a :class="{ active: isActive === 'Login' }" class="item">
-        Login
-      </a>
-      <a :class="{ active: isActive === 'Sign up' }" class="item">
-        Sign Up
-      </a>
       <a :class="{ active: isActive === 'Questions' }" class="item">
         <strong>Questions</strong>
+      </a>
+      <a :class="{ active: isActive === 'Profile' }" class="item">
+        <strong>Your Profile</strong>
       </a>
     </div>
   </header>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
       isActive: 'Home',
     }
+  },
+  computed: {
+    ...mapGetters([
+      'currentUser',
+    ])
   }
 }
 
