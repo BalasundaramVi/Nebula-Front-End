@@ -1,5 +1,5 @@
 const currentUser = state => state.currentUser;
 
-const getQuestions = (state) => { return (state.questions); };
+const questions = state => state.userQuestions;
 
-export { currentUser, getQuestions };
+export { currentUser, questions };

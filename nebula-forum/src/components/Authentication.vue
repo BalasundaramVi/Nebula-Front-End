@@ -1,6 +1,7 @@
 <template>
 
   <div class="authentication-container">
+    
     <div class="login-container">
       <form class="ui form">
         <h4 class="ui dividing header">Log In</h4>
@@ -12,7 +13,10 @@
           <label>Password</label>
           <input type="password" v-model="loginPassword" name="password" placeholder="Password">
         </div>
-        <button  @click="signIn" class="ui blue button" type="submit">Login</button>
+        <button  @click.prevent="signIn" class="ui blue button" type="submit">Login</button>
+        <div v-if="loginLoading" class="ui inverted active dimmer">
+          <div class="ui text loader">Signing You In...</div>
+        </div>
       </form>
     </div>
 
@@ -54,6 +58,9 @@
           </div>
         </div>
         <button @click.prevent="createAccount" class="ui positive button" type="submit">Sign up</button>
+        <div v-if="signUpLoading" class="ui inverted active dimmer">
+          <div class="ui text loader">Creating Account...</div>
+        </div>
       </form>
     </div>
   </div>
@@ -64,12 +71,27 @@
 import Firebase from 'firebase';
 import store from '../store/store';
 import { dbUsersRef, dbQuestionsRef } from '../firebaseConfig';
+import { mapGetters } from 'vuex';
 
 Firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     dbUsersRef.on("value", (snapshot) => {
-      const newUser = snapshot.val()[user.displayName];
+      let val = snapshot.val()[user.displayName];
+      const questions = [];
+      for (let key in val.unansweredQuestions) {
+        val.unansweredQuestions[key].key = key;
+        questions.push(val.unansweredQuestions[key]);
+      }
+      const newUser = {
+        email: val.email,
+        firstname: val.firstname,
+        lastname: val.lastname,
+        username: val.username,
+        answeredQuestions: val.answered,
+        key: user.displayName,
+      }
       store.dispatch('setUser', newUser);
+      store.dispatch('setUserQuestions', val.answered);
     })
   } else {
     store.dispatch('setUser', null);
@@ -81,7 +103,7 @@ export default {
     signIn() {
       const email = this.loginEmail;
       const password = this.loginPassword;
-
+      this.loginLoading = true;
       Firebase.auth().signInWithEmailAndPassword(email, password)
         .catch((err) => {
           const errorCode = err.code;
@@ -92,7 +114,11 @@ export default {
           } else {
             alert(errorMessage);
           }
-        });
+        }).then(() => {
+          this.loginEmail = '';
+          this.loginPassword = '';
+          this.loginLoading = false;
+        })
     },
 
     createAccount() {
@@ -128,7 +154,8 @@ export default {
                     const user = Firebase.auth().currentUser;
                     user.updateProfile({
                       displayName: key,
-                    })
+                    });
+                    alert('account has been created - please log in!')
                   })
                 })
               }).catch((err) => {
@@ -157,8 +184,15 @@ export default {
       signupPassword1: '',
       signupPassword2: '',
       termsAndConditions: false,
+      loginLoading: false,
+      signUpLoading: false,
     }
-  }
+  },
+  computed: {
+    ...mapGetters([
+      'currentUser',
+    ]),
+  },
 }
 </script>
 

@@ -5,12 +5,7 @@
     </div>
 
     <div class="main-content-container">
-      <!-- <router-view></router-view> -->
-      <nf-authentication></nf-authentication>
-    </div>
-
-    <div v-if="currentUser" class="bottom-row">
-      <nf-footer></nf-footer>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -20,7 +15,6 @@ import { mapGetters } from 'vuex';
 import { dbQuestionsRef, dbUsersRef } from './firebaseConfig';
 
 import Header from './components/Header.vue';
-import Footer from './components/Footer.vue';
 
 import Authentication from './components/Authentication.vue';
 import Questions from './components/Questions.vue';
@@ -30,7 +24,6 @@ export default {
   name: 'app',
   components: {
     nfHeader: Header,
-    nfFooter: Footer,
     nfAuthentication: Authentication,
     nfQuestions: Questions,
   },
