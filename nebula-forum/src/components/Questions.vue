@@ -64,6 +64,9 @@ Firebase.auth().onAuthStateChanged((user) => {
     dbUsersRef.on("value", (snapshot) => {
       let val = snapshot.val()[user.displayName];
       const questions = [];
+      if (val === undefined) {
+        return;
+      }
       for (let key in val.unansweredQuestions) {
         val.unansweredQuestions[key].key = key;
         questions.push(val.unansweredQuestions[key]);
@@ -79,6 +82,8 @@ Firebase.auth().onAuthStateChanged((user) => {
       store.dispatch('setUser', newUser);
       store.dispatch('setUserQuestions', val.answered);
     })
+  } else {
+    store.dispatch('setUser', null);
   }
 })
 
@@ -145,9 +150,11 @@ export default {
         dbUsersRef.on("value", (snapshot) => {
           let val = snapshot.val()[user.displayName];
           const questions = [];
-          for (let key in val.unansweredQuestions) {
-            val.unansweredQuestions[key].key = key;
-            questions.push(val.unansweredQuestions[key]);
+          if (val !== undefined) {
+            for (let key in val.unansweredQuestions) {
+              val.unansweredQuestions[key].key = key;
+              questions.push(val.unansweredQuestions[key]);
+            }
           }
           const newUser = {
             email: val.email,

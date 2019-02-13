@@ -22,7 +22,7 @@
 
     <div class="signup-container">
 
-      <form class="ui form">
+      <form v-if="!signInBlurb" class="ui form">
         <h4 class="ui dividing header">Sign Up</h4>
         <div class="field">
           <label>Name</label>
@@ -62,6 +62,17 @@
           <div class="ui text loader">Creating Account...</div>
         </div>
       </form>
+      <div v-else class="signInBlurb-container">
+        <div class="ui info message transition">
+          <i class="close icon"></i>
+          <div class="header">
+            You successfully created an account!
+          </div>
+          <ul class="list">
+            <li>Now you can either go to home or directly to the questions!</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -78,6 +89,9 @@ Firebase.auth().onAuthStateChanged((user) => {
     dbUsersRef.on("value", (snapshot) => {
       let val = snapshot.val()[user.displayName];
       const questions = [];
+      if (val === undefined) {
+        return;
+      }
       for (let key in val.unansweredQuestions) {
         val.unansweredQuestions[key].key = key;
         questions.push(val.unansweredQuestions[key]);
@@ -89,6 +103,7 @@ Firebase.auth().onAuthStateChanged((user) => {
         username: val.username,
         answeredQuestions: val.answered,
         key: user.displayName,
+        admin: val.admin || null,
       };
       if (val.admin) {
         newUser.admin = true;
@@ -130,6 +145,7 @@ export default {
         const username = this.username;
         const email = this.signupEmail;
         const password = this.signupPassword1;
+        this.signUpLoading = true;
 
         dbQuestionsRef.on("value", (snapshot) => {
           dbUsersRef.push({
@@ -157,7 +173,8 @@ export default {
                     user.updateProfile({
                       displayName: key,
                     });
-                    alert('account has been created - please log in!')
+                    this.signUpLoading = false;
+                    this.signInBlurb = true;
                   })
                 })
               }).catch((err) => {
@@ -188,6 +205,7 @@ export default {
       termsAndConditions: false,
       loginLoading: false,
       signUpLoading: false,
+      signInBlurb: null,
     }
   },
   computed: {

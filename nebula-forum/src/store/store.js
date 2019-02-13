@@ -2,7 +2,10 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { firebaseMutations } from 'vuexfire';
 
-import { currentUser, questions } from './getters';
+import {
+  currentUser,
+  questions,
+} from './getters';
 import {
   setUser,
   setQuestionsRef,
@@ -24,6 +27,7 @@ const store = new Vuex.Store({
     currentUser: null,
     answered: {},
     userQuestions: [],
+    admin: false,
   },
   getters: {
     currentUser,

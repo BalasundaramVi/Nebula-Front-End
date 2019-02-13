@@ -1,7 +1,7 @@
 <template>
   <header class="top-header">
     <div class="logo-container" />
-    <div v-if="currentUser" :class="currentUser.admin === true ? 'five' : 'four'" class="ui item menu nav-bar">
+    <div v-if="currentUser" class="ui four item menu nav-bar">
       <div :class="{ active: isActive === 'Home' }" @click="$router.push('/'); isActive='Home'" class="ui  primary button item">
         HOME
       </div>
@@ -11,10 +11,7 @@
       <a :class="{ active: isActive === 'Profile' }" class="item">
         <strong>Your Profile</strong>
       </a>
-      <a v-if="currentUser.admin" :class="{ active: isActive === 'Admin'}" class="item">
-        <strong>Admin</strong>
-      </a>
-      <a @click="signOut" class="item">
+      <a @click.prevent="signOut" class="item">
         <strong>Logout</strong>
       </a>
     </div>
@@ -26,39 +23,11 @@ import { mapGetters } from 'vuex';
 import Firebase from 'firebase';
 import store from '../store/store';
 import { dbUsersRef } from '../firebaseConfig';
-import { currentUser } from '../store/getters';
-
-Firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    dbUsersRef.on("value", (snapshot) => {
-      let val = snapshot.val()[user.displayName];
-      const questions = [];
-      for (let key in val.unansweredQuestions) {
-        val.unansweredQuestions[key].key = key;
-        questions.push(val.unansweredQuestions[key]);
-      }
-      const newUser = {
-        email: val.email,
-        firstname: val.firstname,
-        lastname: val.lastname,
-        username: val.username,
-        answeredQuestions: val.answered,
-        key: user.displayName,
-      };
-      if (val.admin) {
-        newUser.admin = true;
-      }
-      store.dispatch('setUser', newUser);
-      store.dispatch('setUserQuestions', val.answered);
-    })
-  }
-})
 
 export default {
   data() {
     return {
       isActive: 'Home',
-      admin: false,
     }
   },
   computed: {
@@ -68,9 +37,11 @@ export default {
   },
   methods: {
     signOut() {
+      console.log('signout');
       Firebase.auth().signOut()
         .then(() => {
-          this.$router.push('/');
+          this.$store.dispatch('setUser', null)
+          this.$router.push('/')
         }).catch((err) => {
           alert(err);
         })
@@ -89,6 +60,7 @@ export default {
   padding-top: 10px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 
 .logo-container {
@@ -98,15 +70,20 @@ export default {
   height: 50px;
   width: auto;
   flex: 1;
+  margin: 9px 0;
 }
 
 .nav-bar {
-  height: 40px;
+  height: 30px;
   flex: 3;
 }
 
-.or {
-  margin-top: 13px;
+.admin {
+  height: 40px;
+}
+
+.admin-container {
+  margin-left: 20px;
 }
 
 </style>
