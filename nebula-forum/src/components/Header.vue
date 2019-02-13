@@ -2,10 +2,10 @@
   <header class="top-header">
     <div class="logo-container" />
     <div v-if="currentUser" :class="currentUser.admin === true ? 'five' : 'four'" class="ui item menu nav-bar">
-      <div :class="{ active: isActive === 'Home' }" @click="$router.push('/')" class="ui  primary button item">
+      <div :class="{ active: isActive === 'Home' }" @click="$router.push('/'); isActive='Home'" class="ui  primary button item">
         HOME
       </div>
-      <a :class="{ active: isActive === 'Questions' }" @click="$router.push('/questions')" class="item">
+      <a :class="{ active: isActive === 'Questions' }" @click="$router.push('/questions'); isActive='Questions'" class="item">
         <strong>Questions</strong>
       </a>
       <a :class="{ active: isActive === 'Profile' }" class="item">
@@ -26,11 +26,39 @@ import { mapGetters } from 'vuex';
 import Firebase from 'firebase';
 import store from '../store/store';
 import { dbUsersRef } from '../firebaseConfig';
+import { currentUser } from '../store/getters';
+
+Firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    dbUsersRef.on("value", (snapshot) => {
+      let val = snapshot.val()[user.displayName];
+      const questions = [];
+      for (let key in val.unansweredQuestions) {
+        val.unansweredQuestions[key].key = key;
+        questions.push(val.unansweredQuestions[key]);
+      }
+      const newUser = {
+        email: val.email,
+        firstname: val.firstname,
+        lastname: val.lastname,
+        username: val.username,
+        answeredQuestions: val.answered,
+        key: user.displayName,
+      };
+      if (val.admin) {
+        newUser.admin = true;
+      }
+      store.dispatch('setUser', newUser);
+      store.dispatch('setUserQuestions', val.answered);
+    })
+  }
+})
 
 export default {
   data() {
     return {
       isActive: 'Home',
+      admin: false,
     }
   },
   computed: {
@@ -47,7 +75,7 @@ export default {
           alert(err);
         })
     }
-  }
+  },
 }
 
 </script>

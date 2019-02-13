@@ -28,9 +28,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   methods: {
-    // goToMenu() {
-    //   this.$router.push({ name: 'menuLink' });
-    // },
+
   },
   computed: {
     ...mapGetters([

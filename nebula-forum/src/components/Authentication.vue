@@ -119,6 +119,7 @@ export default {
           this.loginEmail = '';
           this.loginPassword = '';
           this.loginLoading = false;
+          this.$router.push('/');
         })
     },
 
