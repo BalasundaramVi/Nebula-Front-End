@@ -1,5 +1,5 @@
 import Home from './components/Home.vue';
-import Authentication from './components/Authentication.vue'
+import Authentication from './components/Authentication.vue';
 import Questions from './components/Questions.vue';
 import Add from './components/Add.vue';
 

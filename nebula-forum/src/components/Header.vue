@@ -21,8 +21,6 @@
 <script>
 import { mapGetters } from 'vuex';
 import Firebase from 'firebase';
-import store from '../store/store';
-import { dbUsersRef } from '../firebaseConfig';
 
 export default {
   computed: {
@@ -35,14 +33,14 @@ export default {
       console.log('signout');
       Firebase.auth().signOut()
         .then(() => {
-          this.$store.dispatch('setUser', null)
-          this.$router.push('/')
+          this.$store.dispatch('setUser', null);
+          this.$router.push('/');
         }).catch((err) => {
           alert(err);
-        })
-    }
+        });
+    },
   },
-}
+};
 
 </script>
 

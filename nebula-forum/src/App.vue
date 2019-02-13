@@ -12,33 +12,26 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { dbQuestionsRef, dbUsersRef } from './firebaseConfig';
+import { dbQuestionsRef } from './firebaseConfig';
 
 import Header from './components/Header.vue';
-
-import Authentication from './components/Authentication.vue';
-import Questions from './components/Questions.vue';
-
 
 export default {
   name: 'app',
   components: {
     nfHeader: Header,
-    nfAuthentication: Authentication,
-    nfQuestions: Questions,
   },
   data() {
     return {
-    }
+    };
   },
   computed: {
     ...mapGetters([
       'currentUser',
-    ])
+    ]),
   },
   created() {
     this.$store.dispatch('setQuestionsRef', dbQuestionsRef);
-    // this.$store.dispatch('setUsersRef', dbUsersRef);
   },
 };
 </script>

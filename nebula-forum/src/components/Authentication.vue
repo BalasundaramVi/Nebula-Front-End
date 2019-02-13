@@ -1,7 +1,7 @@
 <template>
 
   <div class="authentication-container">
-    
+
     <div class="login-container">
       <form class="ui form">
         <h4 class="ui dividing header">Log In</h4>
@@ -45,11 +45,18 @@
         </div>
         <div class="field">
           <label>Password</label>
-          <input v-model="signupPassword1" type="password" name="signup-password1" placeholder="Password">
+          <input
+          v-model="signupPassword1"
+          type="password" name="signup-password1"
+          placeholder="Password">
         </div>
         <div class="field">
           <label>Re-enter Password</label>
-          <input v-model="signupPassword2" type="password" name="signup-password2" placeholder="Re-enter password">
+          <input
+            v-model="signupPassword2"
+            type="password"
+            name="signup-password2"
+            placeholder="Re-enter password">
         </div>
         <div class="field">
           <div class="ui checkbox">
@@ -57,7 +64,10 @@
             <label>I agree to the Terms and Conditions</label>
           </div>
         </div>
-        <button @click.prevent="createAccount" class="ui positive button" type="submit">Sign up</button>
+        <button
+          @click.prevent="createAccount"
+          class="ui positive button"
+          type="submit">Sign up</button>
         <div v-if="signUpLoading" class="ui inverted active dimmer">
           <div class="ui text loader">Creating Account...</div>
         </div>
@@ -80,19 +90,19 @@
 
 <script>
 import Firebase from 'firebase';
+import { mapGetters } from 'vuex';
 import store from '../store/store';
 import { dbUsersRef, dbQuestionsRef } from '../firebaseConfig';
-import { mapGetters } from 'vuex';
 
 Firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    dbUsersRef.on("value", (snapshot) => {
-      let val = snapshot.val()[user.displayName];
+    dbUsersRef.on('value', (snapshot) => {
+      const val = snapshot.val()[user.displayName];
       const questions = [];
       if (val === undefined) {
         return;
       }
-      for (let key in val.unansweredQuestions) {
+      for (const key in val.unansweredQuestions) {
         val.unansweredQuestions[key].key = key;
         questions.push(val.unansweredQuestions[key]);
       }
@@ -110,9 +120,9 @@ Firebase.auth().onAuthStateChanged((user) => {
       }
       store.dispatch('setUser', newUser);
       store.dispatch('setUserQuestions', val.answered);
-    })
+    });
   }
-})
+});
 
 export default {
   methods: {
@@ -135,7 +145,7 @@ export default {
           this.loginPassword = '';
           this.loginLoading = false;
           this.$router.push('/');
-        })
+        });
     },
 
     createAccount() {
@@ -147,7 +157,7 @@ export default {
         const password = this.signupPassword1;
         this.signUpLoading = true;
 
-        dbQuestionsRef.on("value", (snapshot) => {
+        dbQuestionsRef.on('value', (snapshot) => {
           dbUsersRef.push({
             firstname,
             lastname,
@@ -162,7 +172,7 @@ export default {
                   .catch((err) => {
                     const errorCode = err.code;
                     const errorMessage = err.message;
-  
+
                     if (errorCode === 'auth/wrong-password') {
                       alert('Wrong password!');
                     } else {
@@ -175,13 +185,13 @@ export default {
                     });
                     this.signUpLoading = false;
                     this.signInBlurb = true;
-                  })
-                })
-              }).catch((err) => {
-                alert(err);
-              })
-          })
-      };
+                  });
+              });
+          }).catch((err) => {
+            alert(err);
+          });
+        });
+      }
 
       this.firstname = '';
       this.lastname = '';
@@ -190,7 +200,7 @@ export default {
       this.signupPassword1 = '';
       this.signupPassword2 = '';
       this.termsAndConditions = false;
-    }
+    },
   },
   data() {
     return {
@@ -206,14 +216,14 @@ export default {
       loginLoading: false,
       signUpLoading: false,
       signInBlurb: null,
-    }
+    };
   },
   computed: {
     ...mapGetters([
       'currentUser',
     ]),
   },
-}
+};
 </script>
 
 <style>

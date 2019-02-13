@@ -7,14 +7,22 @@
           <label>{{ question }}</label>
           <div v-for="(choice, index) in choices" class="field" :key="choice.answer">
             <div class="ui radio checkbox">
-              <input type="radio" @input="handleSelection(index)" :name="choice.answer" tabindex="0" :checked="index===selected">
+              <input
+                type="radio"
+                @input="handleSelection(index)"
+                :name="choice.answer"
+                tabindex="0"
+                :checked="index===selected">
               <label>{{ choice.answer }}</label>
             </div>
           </div>
         </div>
     </div>
       <hr>
-      <button @click.prevent="submitAnswer" type="submit" class="submit-button positive ui button">Submit</button>
+      <button
+        @click.prevent="submitAnswer"
+        type="submit"
+        class="submit-button positive ui button">Submit</button>
     </div>
 
     <div v-if="this.show==='data'" class="results">
@@ -38,7 +46,9 @@
         <nf-chart :options="choices"></nf-chart>
       </div>
       <hr>
-      <button @click.prevent="nextQuestion" class="submit button blue ui button">Next Question</button>
+      <button
+        @click.prevent="nextQuestion"
+        class="submit button blue ui button">Next Question</button>
     </div>
 
     <div v-if="this.show==='none'" class="no-questions">
@@ -46,28 +56,27 @@
       <h4>Don't worry, there are more coming shortly :)</h4>
     </div>
 
-  </div> 
+  </div>
 </div>
 </template>
 
 <script>
-import  { mapGetters } from 'vuex';
-import { currentUser } from '../store/getters'
-import { dbUsersRef, dbQuestionsRef } from '../firebaseConfig';;
+import { mapGetters } from 'vuex';
 import Firebase from 'firebase';
-import store from '../store/store.js';
+import { dbUsersRef } from '../firebaseConfig';
+import store from '../store/store';
 
 import Chart from './Chart.vue';
 
 Firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    dbUsersRef.on("value", (snapshot) => {
-      let val = snapshot.val()[user.displayName];
+    dbUsersRef.on('value', (snapshot) => {
+      const val = snapshot.val()[user.displayName];
       const questions = [];
       if (val === undefined) {
         return;
       }
-      for (let key in val.unansweredQuestions) {
+      for (const key in val.unansweredQuestions) {
         val.unansweredQuestions[key].key = key;
         questions.push(val.unansweredQuestions[key]);
       }
@@ -78,14 +87,14 @@ Firebase.auth().onAuthStateChanged((user) => {
         username: val.username,
         answeredQuestions: val.answered,
         key: user.displayName,
-      }
+      };
       store.dispatch('setUser', newUser);
       store.dispatch('setUserQuestions', val.answered);
-    })
+    });
   } else {
     store.dispatch('setUser', null);
   }
-})
+});
 
 export default {
   data() {
@@ -97,7 +106,7 @@ export default {
       selected: 'none',
       show: 'question',
       stopper: true,
-    }
+    };
   },
   components: {
     nfChart: Chart,
@@ -116,13 +125,13 @@ export default {
         key: this.key,
         choices: this.choices,
         selected: this.selected,
-        votes: votes+1,
-      }
+        votes: votes + 1,
+      };
       this.$store.dispatch('submitQuestion', payload);
-      this.show="data";
+      this.show = 'data';
     },
     nextQuestion() {
-      this.show = "question";
+      this.show = 'question';
       this.stopper = true;
 
       this.$store.dispatch('getQuestion').then((data) => {
@@ -137,7 +146,7 @@ export default {
         this.question = question.question;
         this.selected = 'none';
       });
-    }
+    },
   },
   computed: {
     ...mapGetters([
@@ -147,11 +156,11 @@ export default {
   created() {
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        dbUsersRef.on("value", (snapshot) => {
-          let val = snapshot.val()[user.displayName];
+        dbUsersRef.on('value', (snapshot) => {
+          const val = snapshot.val()[user.displayName];
           const questions = [];
           if (val !== undefined) {
-            for (let key in val.unansweredQuestions) {
+            for (const key in val.unansweredQuestions) {
               val.unansweredQuestions[key].key = key;
               questions.push(val.unansweredQuestions[key]);
             }
@@ -163,7 +172,7 @@ export default {
             username: val.username,
             answeredQuestions: val.answered,
             key: user.displayName,
-          }
+          };
           if (this.stopper === false) {
             return;
           }
@@ -181,13 +190,13 @@ export default {
                 this.key = question.key;
                 this.question = question.question;
               });
-            })
-          })
-        })
-      };
-    })
+            });
+          });
+        });
+      }
+    });
   },
-}
+};
 </script>
 
 <style>
