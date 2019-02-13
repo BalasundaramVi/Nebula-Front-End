@@ -6,10 +6,6 @@ const changeUser = (state, user) => {
   }
 };
 
-// const removeQuestion = (state, key) => {
-//   console.log(state.currentUser);
-// };
-
 const setQuestions = (state, questions) => {
   Object.assign(state, { userQuestions: questions });
 };
@@ -21,7 +17,6 @@ const updateQuestions = (state, key) => {
 
 export {
   changeUser,
-  // removeQuestion,
   setQuestions,
   updateQuestions,
 };

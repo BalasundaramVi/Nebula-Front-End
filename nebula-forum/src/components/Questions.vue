@@ -1,24 +1,23 @@
 <template>
 <div class="question-page">
   <div class="question-forum">
-    <div v-if="this.show==='question'" class="ui massive form">
-      <div class="grouped fields">
-        <label>{{ question }}</label>
-        <div v-for="(choice, index) in choices" class="field" :key="choice.answer">
-          <div class="ui radio checkbox">
-            <input type="radio" @input="handleSelection(index)" :name="choice.answer" tabindex="0" :checked="index===selected">
-            <label>{{ choice.answer }}</label>
+    <div  v-if="this.show==='question'" class="question-container">
+      <div class="ui massive form">
+        <div class="grouped fields">
+          <label>{{ question }}</label>
+          <div v-for="(choice, index) in choices" class="field" :key="choice.answer">
+            <div class="ui radio checkbox">
+              <input type="radio" @input="handleSelection(index)" :name="choice.answer" tabindex="0" :checked="index===selected">
+              <label>{{ choice.answer }}</label>
+            </div>
           </div>
         </div>
-      </div>
+    </div>
       <hr>
       <button @click.prevent="submitAnswer" type="submit" class="submit-button positive ui button">Submit</button>
     </div>
 
     <div v-if="this.show==='data'" class="results">
-      <div v-for="choice in choices" :key="choice.answer">
-        {{ choice }}
-      </div>
       <div class="text-row">
         <div class="ui segments">
           <div class="ui violet segment r-card">
@@ -33,6 +32,10 @@
             <h3>{{ correctAnswer }}</h3>
           </div>
         </div>
+      </div>
+      <hr>
+      <div class="chart-container">
+        <nf-chart :options="choices"></nf-chart>
       </div>
       <hr>
       <button @click.prevent="nextQuestion" class="submit button blue ui button">Next Question</button>
@@ -53,6 +56,8 @@ import { currentUser } from '../store/getters'
 import { dbUsersRef, dbQuestionsRef } from '../firebaseConfig';;
 import Firebase from 'firebase';
 import store from '../store/store.js';
+
+import Chart from './Chart.vue';
 
 Firebase.auth().onAuthStateChanged((user) => {
   if (user) {
@@ -88,6 +93,9 @@ export default {
       show: 'question',
       stopper: true,
     }
+  },
+  components: {
+    nfChart: Chart,
   },
   methods: {
     handleSelection(index) {
@@ -190,7 +198,7 @@ export default {
 }
 
 .question-forum {
-  width: 60%;
+  width: 80%;
   height: 95%;
   max-width: 1100px;
   min-width: 400px;
@@ -199,7 +207,7 @@ export default {
   justify-content: center;
   align-items: center;
   border: 2px solid black;
-  padding: 50px;
+  padding: 30px;
   background-color: white;
 }
 
@@ -221,6 +229,13 @@ export default {
   justify-content: center;
   align-items: center;
 
+}
+
+.chart-container {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 h4, h3 {

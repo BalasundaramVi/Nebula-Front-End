@@ -1,6 +1,5 @@
 import { firebaseAction } from 'vuexfire';
 import { dbQuestionsRef, dbUsersRef } from '../firebaseConfig';
-import store from './store';
 
 const setQuestionsRef = firebaseAction(({ bindFirebaseRef }, { ref }) => {
   bindFirebaseRef('questions', ref);
