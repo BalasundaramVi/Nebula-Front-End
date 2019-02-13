@@ -13,6 +13,8 @@ Deployed using Firebase using the Firebase realtime database.
 
 VueJS, Vuex, and Vue Router were all used for the front-end code.
 
+In case you want to get it up and running locally, you can also read the README.md found in /nebula-forum. The VueCLI has some really easy ways to see the inner workings of the app.
+
 Hope you like it!
 
 As always - feel free to contact me if you have any questions.
