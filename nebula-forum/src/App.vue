@@ -17,11 +17,14 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { dbQuestionsRef, dbUsersRef } from './firebaseConfig';
 
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 
-import Authentication from './components/Authentication.vue'
+import Authentication from './components/Authentication.vue';
+import Questions from './components/Questions.vue';
+
 
 export default {
   name: 'app',
@@ -29,6 +32,7 @@ export default {
     nfHeader: Header,
     nfFooter: Footer,
     nfAuthentication: Authentication,
+    nfQuestions: Questions,
   },
   data() {
     return {
@@ -38,7 +42,11 @@ export default {
     ...mapGetters([
       'currentUser',
     ])
-  }
+  },
+  created() {
+    this.$store.dispatch('setQuestionsRef', dbQuestionsRef);
+    // this.$store.dispatch('setUsersRef', dbUsersRef);
+  },
 };
 </script>
 

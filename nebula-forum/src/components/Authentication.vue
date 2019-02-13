@@ -49,7 +49,7 @@
         </div>
         <div class="field">
           <div class="ui checkbox">
-            <input v-model="termsAndConditions" type="checkbox" tabindex="0" class="hidden">
+            <input type="checkbox" tabindex="0" v-model="termsAndConditions">
             <label>I agree to the Terms and Conditions</label>
           </div>
         </div>
@@ -61,13 +61,89 @@
 </template>
 
 <script>
+import Firebase from 'firebase';
+import store from '../store/store';
+import { dbUsersRef, dbQuestionsRef } from '../firebaseConfig';
+
+Firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    dbUsersRef.on("value", (snapshot) => {
+      const newUser = snapshot.val()[user.displayName];
+      store.dispatch('setUser', newUser);
+    })
+  } else {
+    store.dispatch('setUser', null);
+  }
+})
+
 export default {
   methods: {
     signIn() {
-      return;
+      const email = this.loginEmail;
+      const password = this.loginPassword;
+
+      Firebase.auth().signInWithEmailAndPassword(email, password)
+        .catch((err) => {
+          const errorCode = err.code;
+          const errorMessage = err.message;
+
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password!');
+          } else {
+            alert(errorMessage);
+          }
+        });
     },
+
     createAccount() {
-      return;
+      if (this.signupPassword1 === this.signupPassword2 && this.termsAndConditions) {
+        const firstname = this.firstname;
+        const lastname = this.lastname;
+        const username = this.username;
+        const email = this.signupEmail;
+        const password = this.signupPassword1;
+
+        dbQuestionsRef.on("value", (snapshot) => {
+          dbUsersRef.push({
+            firstname,
+            lastname,
+            username,
+            email,
+            answeredQuestions: [],
+            unansweredQuestions: snapshot.val(),
+          }).then(({ key }) => {
+            Firebase.auth().createUserWithEmailAndPassword(email, password)
+              .then(() => {
+                Firebase.auth().signInWithEmailAndPassword(email, password)
+                  .catch((err) => {
+                    const errorCode = err.code;
+                    const errorMessage = err.message;
+  
+                    if (errorCode === 'auth/wrong-password') {
+                      alert('Wrong password!');
+                    } else {
+                      alert(errorMessage);
+                    }
+                  }).then(() => {
+                    const user = Firebase.auth().currentUser;
+                    user.updateProfile({
+                      displayName: key,
+                    })
+                  })
+                })
+              }).catch((err) => {
+                alert(err);
+              })
+          })
+      };
+
+      this.firstname = '';
+      this.lastname = '';
+      this.username = '';
+      this.signupEmail = '';
+      this.signupPassword1 = '';
+      this.signupPassword2 = '';
+      this.termsAndConditions = false;
     }
   },
   data() {

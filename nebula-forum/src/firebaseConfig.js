@@ -13,5 +13,6 @@ const config = {
 const firebaseApp = Firebase.initializeApp(config);
 const db = firebaseApp.database();
 const dbQuestionsRef = db.ref('questions');
+const dbUsersRef = db.ref('users');
 
-export default dbQuestionsRef;
+export { dbQuestionsRef, dbUsersRef };
