@@ -98,6 +98,17 @@
 
       </form>
     </div>
+
+    <div v-if="success" class="success-container">
+      <div class="ui positive message">
+        <i class="close icon"></i>
+        <div class="header">
+          Success!
+        </div>
+        <p>Your question has been successfully added!</p>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -115,6 +126,7 @@ export default {
       choice3: '',
       choice4: '',
       choice5: '',
+      success: false,
     };
   },
   computed: {
@@ -135,35 +147,35 @@ export default {
       if (this.choice1 !== '') {
         choices.push({
           answer: this.choice1,
-          voteCount: Math.floor(Math.random() * 30),
+          voteCount: 0,
         });
       }
 
       if (this.choice2 !== '') {
         choices.push({
           answer: this.choice2,
-          voteCount: Math.floor(Math.random() * 30),
+          voteCount: 0,
         });
       }
 
       if (this.choice3 !== '') {
         choices.push({
           answer: this.choice3,
-          voteCount: Math.floor(Math.random() * 30),
+          voteCount: 0,
         });
       }
 
       if (this.choice4 !== '') {
         choices.push({
           answer: this.choice4,
-          voteCount: Math.floor(Math.random() * 30),
+          voteCount: 0,
         });
       }
 
       if (this.choice5 !== '') {
         choices.push({
           answer: this.choice5,
-          voteCount: Math.floor(Math.random() * 30),
+          voteCount: 0,
         });
       }
 
@@ -180,6 +192,10 @@ export default {
         this.choice5 = '';
         this.question = '';
         this.correctAnswer = 0;
+        this.success = true;
+        setTimeout(() => {
+          this.success = false;
+        }, 2000)
       });
     },
   },

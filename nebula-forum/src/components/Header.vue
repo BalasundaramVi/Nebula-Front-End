@@ -30,7 +30,6 @@ export default {
   },
   methods: {
     signOut() {
-      console.log('signout');
       Firebase.auth().signOut()
         .then(() => {
           this.$store.dispatch('setUser', null);
