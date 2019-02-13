@@ -2,7 +2,7 @@ import Firebase from 'firebase';
 
 // Initialize Firebase
 const config = {
-  apiKey: 'AIzaSyBH0BkBm0vu8pcYdYXWanImakgC9FfOxjg',
+  apiKey: '',
   authDomain: 'nebula-front-end.firebaseapp.com',
   databaseURL: 'https://nebula-front-end.firebaseio.com',
   projectId: 'nebula-front-end',
