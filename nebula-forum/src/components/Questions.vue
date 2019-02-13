@@ -42,13 +42,36 @@
         </div>
       </div>
       <hr>
-      <div class="chart-container">
+      <div v-if="!moreDetails" class="chart-container">
         <nf-chart :options="choices"></nf-chart>
       </div>
+      <div v-else class="voter-info-container">
+        <h3 class="rough-outline-header">Below is a rough outline of who voted for which answer:</h3>
+        <hr>
+        <div class="ui grid">
+          <div class="twelve wide column">
+            <div class="ui tabular menu">
+              <template v-for="(choice, index) in choices">
+                <a class="item" @click="moreInfoIndex=index; selectedBy=choice.selectedBy" :key="choice.answer" :class="index===moreInfoIndex ? 'active' : ''">
+                  {{ choice.answer }}
+                </a>
+              </template>
+            </div>
+            <div class="ui segment">
+              {{ selectedBy }}
+            </div>
+          </div>
+        </div>
+      </div>
       <hr>
-      <button
-        @click.prevent="nextQuestion"
-        class="submit button blue ui button">Next Question</button>
+      <div class="buttons-container">
+        <button
+          @click.prevent="moreDetails = !moreDetails"
+          class="submit button green ui button">More Details</button>
+        <button
+          @click.prevent="nextQuestion"
+          class="submit button blue ui button">Next Question</button>
+      </div>
     </div>
 
     <div v-if="this.show==='none'" class="no-questions">
@@ -106,6 +129,9 @@ export default {
       selected: 'none',
       show: 'question',
       stopper: true,
+      moreInfoIndex: 0,
+      selectedBy: '',
+      moreDetails: false,
     };
   },
   components: {
@@ -227,6 +253,10 @@ export default {
   background-color: white;
 }
 
+.question-container {
+  width: 80%;
+}
+
 .submit-button {
   margin-top: 40px;
   width: 100%;
@@ -256,6 +286,28 @@ export default {
 
 h4, h3 {
   margin: 0;
+}
+
+.rough-outline-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.buttons-container {
+  display: flex;
+  align-content: space-around;
+  justify-content: space-around;
+}
+
+.voter-info-container {
+  width: 600px;
+  height: 300px;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.grid {
+  justify-content: center;
 }
 
 </style>
