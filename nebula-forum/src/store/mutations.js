@@ -15,10 +15,8 @@ const setQuestions = (state, questions) => {
 };
 
 const updateQuestions = (state, key) => {
-  console.log(JSON.parse(JSON.stringify(state)));
   state.userQuestions.shift();
   state.answered[key] = true;
-  console.log(JSON.parse(JSON.stringify(state)));
 };
 
 export {

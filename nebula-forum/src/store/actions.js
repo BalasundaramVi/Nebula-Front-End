@@ -19,9 +19,9 @@ const submitQuestion = ({ commit, state }, payload) => {
   });
   commit('updateQuestions', payload.key);
   const s = JSON.parse(JSON.stringify(state));
-  const userRef = dbUsersRef.child(s.currentUser.key);
+  const userRef = dbUsersRef.child(s.currentUser.key).child('answered');
   userRef.update({
-    answered: { [payload.key]: true },
+    [payload.key]: true,
   });
 };
 

@@ -93,8 +93,6 @@ Firebase.auth().onAuthStateChanged((user) => {
       store.dispatch('setUser', newUser);
       store.dispatch('setUserQuestions', val.answered);
     })
-  } else {
-    store.dispatch('setUser', null);
   }
 })
 
