@@ -2,13 +2,13 @@
   <header class="top-header">
     <div class="logo-container" />
     <div v-if="currentUser" class="ui four item menu nav-bar">
-      <div :class="{ active: isActive === 'Home' }" @click="$router.push('/'); isActive='Home'" class="ui  primary button item">
+      <div @click="$router.push('/')" class="ui  primary button item">
         HOME
       </div>
-      <a :class="{ active: isActive === 'Questions' }" @click="$router.push('/questions'); isActive='Questions'" class="item">
+      <a @click="$router.push('/questions')" class="item">
         <strong>Questions</strong>
       </a>
-      <a :class="{ active: isActive === 'Profile' }" @click="$router.push('/addQuestion')" class="item">
+      <a @click="$router.push('/addQuestion')" class="item">
         <strong>Add</strong>
       </a>
       <a @click.prevent="signOut" class="item">
@@ -25,11 +25,6 @@ import store from '../store/store';
 import { dbUsersRef } from '../firebaseConfig';
 
 export default {
-  data() {
-    return {
-      isActive: 'Home',
-    }
-  },
   computed: {
     ...mapGetters([
       'currentUser',

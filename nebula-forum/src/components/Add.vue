@@ -76,7 +76,7 @@
 
 <script>
 import { dbQuestionsRef } from '../firebaseConfig';
-
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -89,6 +89,11 @@ export default {
       choice4: '',
       choice5: '',
     }
+  },
+  computed: {
+    ...mapGetters([
+      'currentUser',
+    ]),
   },
   methods: {
     addQuestion() {
@@ -103,35 +108,35 @@ export default {
       if (this.choice1 !== '') {
         choices.push({
           answer: this.choice1,
-          voteCount: 0,
+          voteCount: Math.floor(Math.random() * 30),
         });
       };
 
       if (this.choice2 !== '') {
         choices.push({
           answer: this.choice2,
-          voteCount: 0,
+          voteCount: Math.floor(Math.random() * 30),
         });
       };
 
       if (this.choice3 !== '') {
         choices.push({
           answer: this.choice3,
-          voteCount: 0,
+          voteCount: Math.floor(Math.random() * 30),
         });
       };
 
       if (this.choice4 !== '') {
         choices.push({
           answer: this.choice4,
-          voteCount: 0,
+          voteCount: Math.floor(Math.random() * 30),
         });
       };
 
       if (this.choice5 !== '') {
         choices.push({
           answer: this.choice5,
-          voteCount: 0,
+          voteCount: Math.floor(Math.random() * 30),
         });
       };
 
@@ -139,6 +144,7 @@ export default {
         choices,
         correctAnswer,
         question: this.question,
+        createdBy: this.currentUser.email,
       }).then(() => {
         this.choice1 = '';
         this.choice2 = '';
