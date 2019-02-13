@@ -17,6 +17,7 @@ const submitQuestion = ({ commit, state }, payload) => {
   questionRef.update({
     voteCount: payload.votes,
   });
+  questionRef.child('selectedBy').push(state.currentUser.email);
   commit('updateQuestions', payload.key);
   const s = JSON.parse(JSON.stringify(state));
   const userRef = dbUsersRef.child(s.currentUser.key).child('answered');

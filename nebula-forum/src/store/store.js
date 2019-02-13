@@ -12,7 +12,7 @@ import {
 } from './actions';
 import {
   changeUser,
-  removeQuestion,
+  // removeQuestion,
   updateQuestions,
   setQuestions,
 } from './mutations';
@@ -33,7 +33,7 @@ const store = new Vuex.Store({
   mutations: {
     ...firebaseMutations,
     changeUser,
-    removeQuestion,
+    // removeQuestion,
     updateQuestions,
     setQuestions,
   },

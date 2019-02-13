@@ -1,7 +1,6 @@
 <template>
 <div class="question-page">
   <div class="question-forum">
-
     <div v-if="this.show==='question'" class="ui massive form">
       <div class="grouped fields">
         <label>{{ question }}</label>
@@ -17,10 +16,24 @@
     </div>
 
     <div v-if="this.show==='data'" class="results">
-      <p>{{ choices }}</p>
-      <p>{{ correctAnswer }}</p>
-      <p>{{ question }}</p>
-      <p>{{ selected }}</p>
+      <div v-for="choice in choices" :key="choice.answer">
+        {{ choice }}
+      </div>
+      <div class="text-row">
+        <div class="ui segments">
+          <div class="ui violet segment r-card">
+            <h3>{{ question }}</h3>
+          </div>
+          <div class="ui blue secondary segment r-card">
+            <h4>You answered:</h4>
+            <h3>{{ choices[selected]["answer"] }}</h3>
+          </div>
+          <div class="ui green secondary segment r-card">
+            <h4>The correct answer was:</h4>
+            <h3>{{ correctAnswer }}</h3>
+          </div>
+        </div>
+      </div>
       <hr>
       <button @click.prevent="nextQuestion" class="submit button blue ui button">Next Question</button>
     </div>
@@ -168,7 +181,7 @@ export default {
   width: 95%;
   max-width: 1100px;
   min-width: 400px;
-  height: 500px;
+  height: 800px;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -207,6 +220,11 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+}
+
+h4, h3 {
+  margin: 0;
 }
 
 </style>

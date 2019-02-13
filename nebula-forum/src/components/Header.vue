@@ -2,10 +2,10 @@
   <header class="top-header">
     <div class="logo-container" />
     <div v-if="currentUser" :class="currentUser.admin === true ? 'five' : 'four'" class="ui item menu nav-bar">
-      <div :class="{ active: isActive === 'Home' }" class="ui  primary button item">
+      <div :class="{ active: isActive === 'Home' }" @click="$router.push('/')" class="ui  primary button item">
         HOME
       </div>
-      <a :class="{ active: isActive === 'Questions' }" class="item">
+      <a :class="{ active: isActive === 'Questions' }" @click="$router.push('/questions')" class="item">
         <strong>Questions</strong>
       </a>
       <a :class="{ active: isActive === 'Profile' }" class="item">
@@ -42,9 +42,9 @@ export default {
     signOut() {
       Firebase.auth().signOut()
         .then(() => {
-          console.log('logged out');
+          this.$router.push('/');
         }).catch((err) => {
-          console.log(err);
+          alert(err);
         })
     }
   }

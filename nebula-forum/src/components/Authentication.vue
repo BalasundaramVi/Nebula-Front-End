@@ -89,6 +89,9 @@ Firebase.auth().onAuthStateChanged((user) => {
         username: val.username,
         answeredQuestions: val.answered,
         key: user.displayName,
+      };
+      if (val.admin) {
+        newUser.admin = true;
       }
       store.dispatch('setUser', newUser);
       store.dispatch('setUserQuestions', val.answered);
