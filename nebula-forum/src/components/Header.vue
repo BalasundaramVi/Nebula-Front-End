@@ -8,8 +8,8 @@
       <a :class="{ active: isActive === 'Questions' }" @click="$router.push('/questions'); isActive='Questions'" class="item">
         <strong>Questions</strong>
       </a>
-      <a :class="{ active: isActive === 'Profile' }" class="item">
-        <strong>Your Profile</strong>
+      <a :class="{ active: isActive === 'Profile' }" @click="$router.push('/addQuestion')" class="item">
+        <strong>Add</strong>
       </a>
       <a @click.prevent="signOut" class="item">
         <strong>Logout</strong>

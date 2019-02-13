@@ -112,6 +112,7 @@ export default {
         return;
       }
       const votes = this.choices[this.selected].voteCount;
+      console.log(votes);
       const payload = {
         key: this.key,
         choices: this.choices,
